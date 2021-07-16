@@ -50,15 +50,16 @@ export default function Report(props) {
   };
 
   const peticion = async (data) => {
+    let respuesta;
     console.log("- - - -a enviar:", data);
-    const respuesta = await axios.post(
-      "https://ministeriodesarrolloproductivo.herokuapp.com/api/reports",
-      data
-    );
     try {
+      respuesta = await axios.post(
+        "https://ministeriodesarrolloproductivo.herokuapp.com/api/reports",
+        data
+      );
       console.log("respuesta", respuesta);
     } catch (error) {
-      console.log("error", error.response.errors);
+      console.log("error", error.response.data.errors);
     }
     return respuesta;
   };
