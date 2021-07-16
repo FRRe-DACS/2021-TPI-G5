@@ -37,6 +37,8 @@ export default function Item(props) {
   };
 
   const [item, setItem] = useState({
+    unidad_medida: "",
+    cantidad_prod: "",
     id: "",
     denominacion: "",
     codigo_ean: "",
@@ -70,18 +72,20 @@ export default function Item(props) {
       .then((response) => {
         console.log("Item updateado", response.data);
         // setItem(response.data); //hasta que esté deployado en Heroku la actualizacion
-        setStatus("success")
-        setMessage("La venta se modificó correctamente")
+        setStatus("success");
+        setMessage("La venta se modificó correctamente");
         setOpen(true);
       })
       .catch((e) => {
         // console.log(e.message);
         if (e.message === `Request failed with status code 403`) {
           setStatus("error");
-          setMessage("No tiene autorizacion para modificar, llame a un Administrador")
+          setMessage(
+            "No tiene autorizacion para modificar, llame a un Administrador"
+          );
         } else {
-        setMessage(JSON.stringify(e.message));
-          setStatus("warning")
+          setMessage(JSON.stringify(e.message));
+          setStatus("warning");
         }
         setOpen(true);
       });
@@ -90,6 +94,8 @@ export default function Item(props) {
 
   const resetForm = () => {
     reset({
+      unidad_medida: item.unidad_medida,
+      cantidad_prod: item.cantidad_prod,
       denominacion: item.denominacion,
       codigo_ean: item.codigo_ean,
       cantidad_vend: item.cantidad_vend,
@@ -103,8 +109,8 @@ export default function Item(props) {
     await SaleService.remove(item._id)
       .then((response) => {
         console.log("Eliminado con exito", response.data);
-        setStatus("success")
-        setMessage("La venta se eliminó correctamente")
+        setStatus("success");
+        setMessage("La venta se eliminó correctamente");
         setOpen(true);
         setTimeout(() => {
           props.history.push("/report");
@@ -114,10 +120,12 @@ export default function Item(props) {
         // console.log(JSON.stringify(e.message));
         if (e.message === `Request failed with status code 403`) {
           setStatus("error");
-          setMessage("No tiene autorizacion para eliminar, llame a un Administrador")
+          setMessage(
+            "No tiene autorizacion para eliminar, llame a un Administrador"
+          );
         } else {
-        setMessage(JSON.stringify(e.message));
-          setStatus("warning")
+          setMessage(JSON.stringify(e.message));
+          setStatus("warning");
         }
         setOpen(true);
       });
@@ -205,6 +213,48 @@ export default function Item(props) {
           <Grid item xs={12} sm={6}>
             <Controller
               control={control}
+              name="cantidad_prod"
+              render={({ field: { onChange, onBlur, value, ref } }) => (
+                <TextField
+                  required
+                  id="cantidad_prod"
+                  name="cantidad_prod"
+                  label="Cantidad producida"
+                  type="number"
+                  fullWidth
+                  autoComplete="off"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
+              defaultValue={item.cantidad_prod}
+              rules={{ required: true }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Controller
+              control={control}
+              name="unidad_medida"
+              render={({ field: { onChange, onBlur, value, ref } }) => (
+                <TextField
+                  required
+                  id="unidad_medida"
+                  name="unidad_medida"
+                  label="Unidad medida"
+                  type="text"
+                  fullWidth
+                  autoComplete="off"
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
+              defaultValue={item.unidad_medida}
+              rules={{ required: true }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Controller
+              control={control}
               name="cantidad_vend"
               render={({ field: { onChange, onBlur, value, ref } }) => (
                 <TextField
@@ -255,14 +305,35 @@ export default function Item(props) {
                 color="primary"
                 onClick={handleSubmit(onSubmit)}
               >
-                {sending ? <> Editando <CircularProgress color="secondary" size={22} /> </ > : "Editar"}
+                {sending ? (
+                  <>
+                    {" "}
+                    Editando <CircularProgress
+                      color="secondary"
+                      size={22}
+                    />{" "}
+                  </>
+                ) : (
+                  "Editar"
+                )}
               </Button>
               {/* </Link> */}
             </Grid>
             <Grid item>
               {/* <Link to="/report" style={{ textDecoration: "none" }}> */}
-              <Button fullWidth variant="contained" color="primary" onClick={deteleItem}>
-                {sendingDelete ? <>Eliminando <CircularProgress color="secondary" size={22} /> </ > : "Eliminar"}
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={deteleItem}
+              >
+                {sendingDelete ? (
+                  <>
+                    Eliminando <CircularProgress color="secondary" size={22} />{" "}
+                  </>
+                ) : (
+                  "Eliminar"
+                )}
               </Button>
               {/* </Link> */}
             </Grid>
@@ -286,7 +357,6 @@ export default function Item(props) {
             {message}
           </Alert>
         </Snackbar>
-
       </Container>
     </div>
   );

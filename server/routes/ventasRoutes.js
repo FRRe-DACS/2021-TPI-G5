@@ -16,9 +16,9 @@ app.get("/ventas/:id", [authJwt.verifyToken], getVentaByID);
 
 app.post("/ventas", [authJwt.verifyToken], addVenta);
 
-app.patch("/ventas/:id", [authJwt.verifyToken, authJwt.isModeratorOrAdmin], modifyByID);
+app.patch("/ventas/:id", [authJwt.verifyToken], modifyByID);
 
-app.delete("/ventas/:id", [authJwt.verifyToken, authJwt.isAdmin], deleteByID);
+app.delete("/ventas/:id", [authJwt.verifyToken], deleteByID);
 
 //app.delete("/ventas");
 

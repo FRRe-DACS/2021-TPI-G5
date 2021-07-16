@@ -8,6 +8,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import moment from "moment";
 import SaleService from "services/SaleService";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -20,6 +21,46 @@ export default function Report(props) {
 
   const handleClick = () => {
     setOpen(true);
+    let listaRegistro = data.map((item) => {
+      return {
+        denominacion: item.denominacion || "",
+        codigo_ean: item.codigo_ean || 0,
+        precio_unidad: item.precio || 0,
+        unidad_medida: item.unidad_medida || "",
+        cantidad_prod: item.cantidad_prod || 0,
+        cantidad_vend: item.cantidad_vend || 0,
+      };
+    });
+
+    let infoEmpresa = {
+      cuit: 20304050608,
+      razon_social: "COPOREICHON SA",
+    };
+    let periodo = {
+      year: moment(data[0].fecha).format("YY"),
+      month: moment(data[0].fecha).format("MM"),
+    };
+    let aEnviar = {
+      infoEmpresa: infoEmpresa,
+      listaRegistro: listaRegistro,
+      periodo: periodo,
+    };
+    console.log(aEnviar);
+    peticion(aEnviar);
+  };
+
+  const peticion = async (data) => {
+    console.log("- - - -a enviar:", data);
+    const respuesta = await axios.post(
+      "https://ministeriodesarrolloproductivo.herokuapp.com/api/reports",
+      data
+    );
+    try {
+      console.log("respuesta", respuesta);
+    } catch (error) {
+      console.log("error", error.response.errors);
+    }
+    return respuesta;
   };
 
   const handleClose = (event, reason) => {
@@ -38,17 +79,6 @@ export default function Report(props) {
 
     consultaAPI();
   }, []);
-
-  /* Esto esta mal
-
-     fetch("https://secure-sands-97755.herokuapp.com/ventas")
-       .then((response) => response.json())
-       .then((data) => {
-         setData(data);
-         setLoading(false)
-       });
-       
-  */
 
   const prettyDate = {
     type: "date",

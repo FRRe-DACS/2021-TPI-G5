@@ -11,12 +11,22 @@ const ventaSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  codigo_ean: {
+  unidad_medida: {
     type: String,
     required: true,
     trim: true,
   },
+  codigo_ean: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
   cantidad_vend: {
+    type: Number,
+    required: true,
+    min: 1,
+  }, // CANTIDAD 1
+  cantidad_prod: {
     type: Number,
     required: true,
     min: 1,
