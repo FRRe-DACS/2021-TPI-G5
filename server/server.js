@@ -7,11 +7,12 @@ swaggerDocument = require('./swagger.json');
 const port = process.env.PORT;
 
 // ROUTES
-const externalRoutes = require("./routes/externalRoutes");
-const ventaRoutes = require("./routes/ventasRoutes");
-const userRoutes = require("./routes/userRoutes");
-const authRoutes = require("./routes/authRoutes");
-const empresaRoutes = require("./routes/empresaRoutes");
+// const externalRoutes = require("./routes/externalRoutes");
+// const ventaRoutes = require("./routes/ventasRoutes");
+// const userRoutes = require("./routes/userRoutes");
+// const authRoutes = require("./routes/authRoutes");
+// const empresaRoutes = require("./routes/empresaRoutes");
+const routes = require("./routes");
 
 const app = express();
 
@@ -58,18 +59,18 @@ mongoose
 
 // ROUTES BINDING
 // app.use("/api", require("./routes/index"));
-app.use("/", externalRoutes);
-app.use("/", ventaRoutes);
+// app.use("/", externalRoutes);
+// app.use("/", ventaRoutes);
 
-// routes auth
-app.use("/", userRoutes)
-app.use("/", authRoutes)
-app.use("/", empresaRoutes)
+// // routes auth
+// app.use("/", userRoutes)
+// app.use("/", authRoutes)
+app.use(routes)
 
-//START message
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// //START message
+// app.get("/", (req, res) => {
+//   res.send("Hello World!");
+// });
 
 app.listen(port, () => {
   console.log(`La RotiseriApp is up & running at http://localhost:${port}`);
